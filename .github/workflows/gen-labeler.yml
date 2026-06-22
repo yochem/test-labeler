@@ -1,0 +1,36 @@
+name: "Generate Labeler Config"
+on:
+  schedule:
+    # Every Sunday at 06:00 UTC
+    - cron: "0 6 * * 0"
+  workflow_dispatch:
+
+jobs:
+  gen-labeler:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: astral-sh/setup-uv@v5
+    - name: Regenerate .github/labeler.yml
+      run: uv run utils/gen_labeler.py
+    - name: Create pull request
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        if git diff --quiet -- .github/labeler.yml; then
+          echo "No changes to labeler config."
+          exit 0
+        fi
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout -b scout/regenerate-labeler
+        git add .github/labeler.yml
+        git commit -m "[SCOUT] Regenerate labeler config with current teams"
+        git push -f -u origin scout/regenerate-labeler
+        gh pr create \
+          --title "[SCOUT] Regenerate labeler config with current teams" \
+          --head scout/regenerate-labeler \
+          || echo "PR already exists; pushed update to existing branch."

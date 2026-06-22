@@ -12,22 +12,13 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: astral-sh/setup-uv@v5
+    - uses: actions/checkout@v6
+    - uses: astral-sh/setup-uv@v8
     - name: Regenerate .github/labeler.yml
       run: uv run utils/gen_labeler.py
-    - name: Create pull request
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        if git diff --quiet -- .github/labeler.yml; then
-          echo "No changes to labeler config."
-          exit 0
-        fi
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git checkout -b scout/regenerate-labeler
-        git add .github/labeler.yml
-        git commit -m "[SCOUT] Regenerate labeler config with current teams"
-        git push -f -u origin scout/regenerate-labeler
-        gh pr create --fill || echo "PR already exists; pushed update to existing branch."
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v8
+      with:
+        commit-message: '[SCOUT] Regenerate labeler config with current teams'
+        branch: gen-labeler
+        title: '[SCOUT] Regenerate labeler config with current teams'

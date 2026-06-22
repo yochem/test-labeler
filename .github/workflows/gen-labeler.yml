@@ -30,7 +30,4 @@ jobs:
         git add .github/labeler.yml
         git commit -m "[SCOUT] Regenerate labeler config with current teams"
         git push -f -u origin scout/regenerate-labeler
-        gh pr create \
-          --title "[SCOUT] Regenerate labeler config with current teams" \
-          --head scout/regenerate-labeler \
-          || echo "PR already exists; pushed update to existing branch."
+        gh pr create --fill || echo "PR already exists; pushed update to existing branch."

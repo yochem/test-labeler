@@ -1,15 +1,18 @@
 env:development:
-  - changed-files:
-    - any-glob-to-any-file: 'environment/development/**'
+- changed-files:
+  - any-glob-to-any-file: environment/development/**
 
 env:testing:
-  - changed-files:
-    - any-glob-to-any-file: 'environment/testing/**'
+- changed-files:
+  - any-glob-to-any-file: environment/testing/**
 
 env:acceptance:
-  - changed-files:
-    - any-glob-to-any-file: 'environment/acceptance/**'
+- changed-files:
+  - any-glob-to-any-file: environment/acceptance/**
 
 env:production:
-  - changed-files:
-    - any-glob-to-any-file: 'environment/production/**'
+- changed-files:
+  - any-glob-to-any-file: environment/production/**
+team:marketing-automation:
+- changed-files:
+  - any-glob-to-any-file: environment/*/marketing-automation/**

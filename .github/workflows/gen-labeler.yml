@@ -22,3 +22,4 @@ jobs:
         commit-message: '[SCOUT] Regenerate labeler config with current teams'
         branch: gen-labeler
         title: '[SCOUT] Regenerate labeler config with current teams'
+        draft: always-true
